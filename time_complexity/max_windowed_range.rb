@@ -16,24 +16,24 @@ class MyQueue
   def initialize
     @store = []
   end
-  
+
   def peek
     @store.first
   end
-  
+
   def size
     @store.count
   end
-  
+
   def empty?
     @store.empty?
   end
-  
+
   def enqueue(el)
     @store.push(el)
-    return self
+    self
   end
-  
+
   def dequeue
     @store.shift
   end
@@ -44,7 +44,7 @@ class MyStack
   def initialize
     @store = []
   end
-  
+
   def peek
     @store.last
   end
@@ -59,44 +59,44 @@ class MyStack
 
   def push(el)
     @store.push(el)
-    return self
+    self
   end
 
   def pop
     @store.pop
   end
-  
+
 end
 
 
-class MyStackQueue 
+class MyStackQueue
   def initialize
-    @store1 = MyStack.new 
+    @store1 = MyStack.new
     @store2 = MyStack.new
   end
-  
+
   def peek
     @store2.peek
   end
-  
+
   def size
     @store1.count + @store2.count
   end
-  
+
   def empty?
     @store1.empty? && @store2.empty?
   end
-  
+
   def enqueue(el)
     @store1.push(el)
-    return self
+    self
   end
-  
+
   def dequeue
     if @store2.empty?
       @store2.push(@store1.pop) until @store1.empty?
     end
-    
+
     @store2.pop
   end
 end
@@ -107,15 +107,15 @@ class MinMaxStack
     @max = MyStack.new
     @min = MyStack.new
   end
-  
+
   def max
     @max.peek
   end
-  
+
   def min
     @min.peek
   end
-  
+
   def peek
     @store.peek
   end
@@ -130,10 +130,10 @@ class MinMaxStack
 
   def push(el)
     @max.push(el) if max.nil? || (el > max)
-    @min.push(el) if min.nil? || (el < min) 
-    
+    @min.push(el) if min.nil? || (el < min)
+
     @store.push(el)
-    return self
+    self
   end
 
   def pop
@@ -141,7 +141,7 @@ class MinMaxStack
     @min.pop if peek == min
     @store.pop
   end
-  
+
 end
 
 class MinMaxStackQueue
@@ -149,37 +149,37 @@ class MinMaxStackQueue
     @store1 = MinMaxStack.new
     @store2 = MinMaxStack.new
   end
-  
+
   def max
     [@store1.max, @store2.max].max
   end
-  
+
   def min
     [@store1.min, @store2.min].min
   end
-  
+
   def peek
     @store2.peek
   end
-  
+
   def size
     @store1.count + @store2.count
   end
-  
+
   def empty?
     @store1.empty? && @store2.empty?
   end
-  
+
   def enqueue(el)
     @store1.push(el)
-    return self
+    self
   end
-  
+
   def dequeue
     if @store2.empty?
       @store2.push(@store1.pop) until @store1.empty?
     end
-    
+
     @store2.pop
   end
 end
@@ -189,14 +189,14 @@ if __FILE__ == $0
   # p windowed_max_range([1, 0, 2, 5, 4, 8], 3) == 5 # 0, 2, 5
   # p windowed_max_range([1, 0, 2, 5, 4, 8], 4) == 6 # 2, 5, 4, 8
   # p windowed_max_range([1, 3, 2, 5, 4, 8], 5) == 6 # 3, 2, 5, 4, 8
-  
+
   test = MyStackQueue.new
   test.enqueue(1)
   test.enqueue(2)
   test.enqueue(3)
   test.dequeue
   p test.peek
-  
+
   test2 = MinMaxStack.new
   test2.push(12)
   test2.push(-2)
@@ -209,17 +209,17 @@ if __FILE__ == $0
   test2.pop
   p test2.min
   p test2.max
-  
-  
+
+
   test3 = MinMaxStackQueue.new
   test3.enqueue(5)
   test3.enqueue(1)
   test3.enqueue(-3)
   test3.enqueue(9)
   test3.enqueue(100)
-  
+
   p test3.min == -3
   p test3.max == 100
-  
+
 
 end
