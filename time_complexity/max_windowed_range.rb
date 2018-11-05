@@ -1,5 +1,5 @@
 
-# Time Complexity: O(n^2)
+# O(n^2) time, O(n) space
 def windowed_max_range(arr, window_size)
   current_max_range = nil
   arr.each_with_index do |el, i|
@@ -151,11 +151,19 @@ class MinMaxStackQueue
   end
 
   def max
-    [@store1.max, @store2.max].max
+    if @store1.max.nil? && @store2.max.nil?
+      nil
+    else
+      [@store1.max || -Float::INFINTY, @store2.max || -Float::INFINITY].max
+    end
   end
 
   def min
-    [@store1.min, @store2.min].min
+    if @store1.min.nil? && @store2.min.nil?
+      nil
+    else
+      [@store1.min || Float::INFINTY, @store2.min || Float::INFINITY].min
+    end
   end
 
   def peek
@@ -184,42 +192,34 @@ class MinMaxStackQueue
   end
 end
 
+# O(n) time, O(n) space
+def optimized_windowed_max_range(arr, window_size)
+  current_max_range = -1
+  window = MinMaxStackQueue.new
+
+  (0...window_size - 1).each { |i| window.enqueue(arr[i]) }
+
+  ((window_size - 1)...arr.length).each do |i|
+    window.enqueue(arr[i])
+    range = window.max - window.min
+    current_max_range = range if range > current_max_range
+    window.dequeue
+  end
+
+  current_max_range
+end
+
 if __FILE__ == $0
-  # p windowed_max_range([1, 0, 2, 5, 4, 8], 2) == 4 # 4, 8
-  # p windowed_max_range([1, 0, 2, 5, 4, 8], 3) == 5 # 0, 2, 5
-  # p windowed_max_range([1, 0, 2, 5, 4, 8], 4) == 6 # 2, 5, 4, 8
-  # p windowed_max_range([1, 3, 2, 5, 4, 8], 5) == 6 # 3, 2, 5, 4, 8
+  p windowed_max_range([1, 0, 2, 5, 4, 8], 2) == 4 # 4, 8
+  p windowed_max_range([1, 0, 2, 5, 4, 8], 3) == 5 # 0, 2, 5
+  p windowed_max_range([1, 0, 2, 5, 4, 8], 4) == 6 # 2, 5, 4, 8
+  p windowed_max_range([1, 3, 2, 5, 4, 8], 5) == 6 # 3, 2, 5, 4, 8
 
-  test = MyStackQueue.new
-  test.enqueue(1)
-  test.enqueue(2)
-  test.enqueue(3)
-  test.dequeue
-  p test.peek
+  puts "-----------------------------------"
 
-  test2 = MinMaxStack.new
-  test2.push(12)
-  test2.push(-2)
-  test2.push(3)
-  test2.push(9)
-  p test2.min
-  p test2.max
-  test2.pop
-  test2.pop
-  test2.pop
-  p test2.min
-  p test2.max
-
-
-  test3 = MinMaxStackQueue.new
-  test3.enqueue(5)
-  test3.enqueue(1)
-  test3.enqueue(-3)
-  test3.enqueue(9)
-  test3.enqueue(100)
-
-  p test3.min == -3
-  p test3.max == 100
-
+  p optimized_windowed_max_range([1, 0, 2, 5, 4, 8], 2) == 4 # 4, 8
+  p optimized_windowed_max_range([1, 0, 2, 5, 4, 8], 3) == 5 # 0, 2, 5
+  p optimized_windowed_max_range([1, 0, 2, 5, 4, 8], 4) == 6 # 2, 5, 4, 8
+  p optimized_windowed_max_range([1, 3, 2, 5, 4, 8], 5) == 6 # 3, 2, 5, 4, 8
 
 end
